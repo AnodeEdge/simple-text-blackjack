@@ -42,21 +42,9 @@ class Deck:
 class Player:
     def __init__(self, dealer=False):
         self.hand = []
+        # Dealer parameter in constructor intended for future feature
+        # to allow for multiple players
         self.dealer = dealer
-
-    def show_hand(self, turn):
-        if self.dealer == True:
-            print("The Dealer has:")
-        else:
-            print("The Player has:")
-        for count, card in enumerate(self.hand):
-            if count == 0 and self.dealer == True and turn == 0:
-                print("A face down card")
-            else:
-                print(f"{card.rank} of {card.suit}")
-        if self.dealer == False:
-            print(f'The count is {self.get_value()}')
-        print("")
 
     def draw_card(self, card):
         self.hand.append(card)
@@ -100,6 +88,7 @@ class Blackjack:
         player.draw_card(self.deck.deal_card())
 
     def reshuffle(self):
+        # Rebuild and reshuffle deck when deck size reaches 50% of original size
         if (self.deck.sets * len(self.deck.cards)) < (self.deck.sets * 52 * 0.5):
             self.deck.create_deck()
             self.deck.shuffle()
@@ -115,6 +104,7 @@ class Blackjack:
             self.draw(self.dealer)
 
     def show_dealer_hand(self):
+        # Shows dealer's hand, for first turn, hides one card
         print("The Dealer has: ")
         for count, card in enumerate(self.dealer.hand):
             if count == 0 and self.turn == 0:
@@ -143,6 +133,7 @@ class Blackjack:
             print("Try again")
 
     def dealer_move(self):
+        # Dealer will always hit if their value is below or equal to 16
         if self.dealer.get_value() <= 16:
             self.draw(self.dealer)
             return "hit"
@@ -162,6 +153,7 @@ class Blackjack:
         return False
 
     def check_for_bust(self):
+        # Determines who wins based on whether player or dealer busts
         if self.player.is_bust():
             print("Player Busts, Dealer Wins")
             return True
@@ -174,7 +166,7 @@ class Blackjack:
         return False
 
     def get_winner(self):
-        # Compare points
+        # Compare points between player and dealer and print winner
         if self.player.get_value() == self.dealer.get_value():
             print("Its a Draw")
         elif self.player.get_value() > self.dealer.get_value():
